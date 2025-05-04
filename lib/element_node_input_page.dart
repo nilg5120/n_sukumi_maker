@@ -3,35 +3,36 @@ import 'element_node.dart';
 import 'ring_diagram_painter.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
-class PeopleInputPage extends StatefulWidget {
-  const PeopleInputPage({super.key});
+class ElementNodeInputPage extends StatefulWidget {
+  const ElementNodeInputPage({super.key});
 
   @override
-  PeopleInputPageState createState() => PeopleInputPageState();
+  ElementNodeInputPageState createState() => ElementNodeInputPageState();
 }
 
-class PeopleInputPageState extends State<PeopleInputPage> {
+class ElementNodeInputPageState extends State<ElementNodeInputPage> {
 
 
-  List<ElementNode> people = [];
+  List<ElementNode> elementNodes = [];
 
-  void addPerson() {
+
+  void addElementNode() {
     setState(() {
-      final color = defaultColors[people.length % defaultColors.length];
-      people.add(ElementNode(name: '', color: color));
+      final color = defaultColors[elementNodes.length % defaultColors.length];
+      elementNodes.add(ElementNode(name: '', color: color));
     });
   }
 
-  void removePerson(int index) {
+  void removeElementNode(int index) {
     setState(() {
-      people.removeAt(index);
+      elementNodes.removeAt(index);
     });
   }
 
   @override
   void initState() {
     super.initState();
-    people.add(ElementNode(name: '', color: Colors.blue));
+    elementNodes.add(ElementNode(name: '', color: Colors.blue));
   }
 
   @override
@@ -42,11 +43,11 @@ class PeopleInputPageState extends State<PeopleInputPage> {
         children: [
           Expanded(
             child: ListView.builder(
-              itemCount: people.length,
+              itemCount: elementNodes.length,
               itemBuilder: (context, index) {
-                final person = people[index];
-                final otherNames = people
-                    .where((p) => p != person && p.name.isNotEmpty)
+                final elementNode = elementNodes[index];
+                final otherNames = elementNodes
+                    .where((p) => p != elementNode && p.name.isNotEmpty)
                     .map((p) => p.name)
                     .toList();
 
@@ -59,10 +60,10 @@ class PeopleInputPageState extends State<PeopleInputPage> {
                               const InputDecoration(labelText: '名前'),
                           onChanged: (value) {
                             setState(() {
-                              person.name = value;
-                              bool isLast = index == people.length - 1;
+                              elementNode.name = value;
+                              bool isLast = index == elementNodes.length - 1;
                               if (value.isNotEmpty && isLast) {
-                                addPerson();
+                                addElementNode();
                               }
                             });
                           },
@@ -71,7 +72,7 @@ class PeopleInputPageState extends State<PeopleInputPage> {
                       const SizedBox(width: 10),
                       Expanded(
                         child: DropdownButton<String>(
-                          value: person.target,
+                          value: elementNode.target,
                           hint: const Text('対象を選択'),
                           isExpanded: true,
                           items: [
@@ -87,17 +88,17 @@ class PeopleInputPageState extends State<PeopleInputPage> {
                             ),
                           ],
                           onChanged: (value) {
-                            setState(() => person.target = value);
+                            setState(() => elementNode.target = value);
                           },
                         ),
                       ),
                       IconButton(
-                        icon: Icon(Icons.color_lens, color: person.color),
+                        icon: Icon(Icons.color_lens, color: elementNode.color),
                         onPressed: () {
                           showDialog(
                             context: context,
                             builder: (context) {
-                              Color tempColor = person.color;
+                              Color tempColor = elementNode.color;
                               return AlertDialog(
                                 title: const Text('色を選択'),
                                 content: SingleChildScrollView(
@@ -113,7 +114,7 @@ class PeopleInputPageState extends State<PeopleInputPage> {
                                     child: const Text('OK'),
                                     onPressed: () {
                                       setState(() {
-                                        person.color = tempColor;
+                                        elementNode.color = tempColor;
                                       });
                                       Navigator.of(context).pop();
                                     },
@@ -127,7 +128,7 @@ class PeopleInputPageState extends State<PeopleInputPage> {
                       IconButton(
                         icon: const Icon(Icons.delete, color: Colors.red),
                         onPressed: () {
-                          removePerson(index);
+                          removeElementNode(index);
                         },
                       ),
                     ],
@@ -139,7 +140,7 @@ class PeopleInputPageState extends State<PeopleInputPage> {
           SizedBox(
             height: 300,
             child: CustomPaint(
-              painter: RingDiagramPainter(people),
+              painter: RingDiagramPainter(elementNodes),
               child: Container(),
             ),
           ),

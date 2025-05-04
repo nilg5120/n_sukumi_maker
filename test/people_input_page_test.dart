@@ -7,14 +7,14 @@ void main() {
   group('PeopleInputPage Tests', () {
     testWidgets('最初に1人空の人物が表示される', (WidgetTester tester) async {
       // アプリを起動する
-      await tester.pumpWidget(MaterialApp(home: PeopleInputPage()));
+      await tester.pumpWidget(MaterialApp(home: ElementNodeInputPage()));
 
       // テキストフィールドが1個あるか確認
       expect(find.byType(TextField), findsOneWidget);
     });
 
     testWidgets('名前を入力すると空欄が増える', (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(home: PeopleInputPage()));
+      await tester.pumpWidget(MaterialApp(home: ElementNodeInputPage()));
 
       // 最初は1個
       expect(find.byType(TextField), findsOneWidget);
