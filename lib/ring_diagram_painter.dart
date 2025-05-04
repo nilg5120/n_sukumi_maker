@@ -2,23 +2,37 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'element_node.dart';
 
+/// ElementNode のリストをもとに、
+/// 各ノードを円環状に配置し、
+/// それぞれの target（対象）に向かって矢印を描画するカスタムペインター。
 class RingDiagramPainter extends CustomPainter {
   final List<ElementNode> elementNode;
+  /// 描画する ElementNode のリストを受け取る。
   RingDiagramPainter(this.elementNode);
 
+/// キャンバスにノードと矢印を描画する。
+/// - 名前が入力されているノードのみ対象。
+/// - グループごとに円の半径を変えて描画。
+/// - ノード同士の接続（target）には矢印を描く。
   @override
   void paint(Canvas canvas, Size size) {
+    /// 名前が入力されているノードだけを抽出。
     final validElementNode = elementNode.where((p) => p.name.isNotEmpty).toList();
 
     if (validElementNode.isEmpty) return;
 
+    /// ノードをグループ（つながっているノード群）に分類。
     final groupMap = groupElementNode(validElementNode);
 
+    /// グループIDごとにノードをまとめる。
     final groups = <int, List<ElementNode>>{};
     for (var person in validElementNode) {
       final gid = groupMap[person.name]!;
       groups.putIfAbsent(gid, () => []).add(person);
     }
+
+/// 各グループごとに円周上にノードを配置し、
+/// 名前のテキストと色付きの円を描く。
 
     final center = size.center(Offset.zero);
     final baseRadius = 80.0;
@@ -76,6 +90,7 @@ class RingDiagramPainter extends CustomPainter {
       drawArrowHead(canvas, fromOffset, toOffset);
     }
   }
+/// from から to に向かう矢印の先端（三角形）を描画する。
 
   void drawArrowHead(Canvas canvas, Offset from, Offset to) {
     const arrowSize = 10.0;
@@ -100,9 +115,14 @@ class RingDiagramPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 
+/// ノード同士の接続（target）をたどり、
+/// つながっているノードを同じグループIDに分類する。
+/// DFS（深さ優先探索）でグループを決定。
+
   Map<String, int> groupElementNode(List<ElementNode> elementNodes) {
     Map<String, int> groupMap = {};
     int groupId = 0;
+/// DFS（深さ優先探索）で target をたどる関数。
 
     void dfs(String name) {
       for (var elementNode in elementNodes) {

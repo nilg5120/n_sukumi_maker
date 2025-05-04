@@ -3,6 +3,7 @@ import 'element_node.dart';
 import 'ring_diagram_painter.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
+/// エレメントノードの入力ページ
 class ElementNodeInputPage extends StatefulWidget {
   const ElementNodeInputPage({super.key});
 
@@ -10,12 +11,14 @@ class ElementNodeInputPage extends StatefulWidget {
   ElementNodeInputPageState createState() => ElementNodeInputPageState();
 }
 
+/// ElementNodeInputPage の状態を管理する State クラス
+/// ユーザーが ElementNode を追加・削除・編集できる機能を提供
 class ElementNodeInputPageState extends State<ElementNodeInputPage> {
 
-
+  /// 現在入力されている ElementNode（エレメントノード）のリスト。
   List<ElementNode> elementNodes = [];
 
-
+  /// デフォルトカラーを設定した空の ElementNode をリストに追加し、UI を更新する。
   void addElementNode() {
     setState(() {
       final color = defaultColors[elementNodes.length % defaultColors.length];
@@ -23,22 +26,26 @@ class ElementNodeInputPageState extends State<ElementNodeInputPage> {
     });
   }
 
+  /// 指定したインデックスの ElementNodeを削除し、UI を更新する。
   void removeElementNode(int index) {
     setState(() {
       elementNodes.removeAt(index);
     });
   }
 
+  /// 初期化時
   @override
   void initState() {
     super.initState();
+    // 最初のエレメントノードを追加する
     elementNodes.add(ElementNode(name: '', color: Colors.blue));
   }
 
+  /// UI を構築する。
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('メンバー入力')),
+      appBar: AppBar(title: const Text('nすくみメーカー')),
       body: Column(
         children: [
           Expanded(
@@ -54,6 +61,7 @@ class ElementNodeInputPageState extends State<ElementNodeInputPage> {
                 return ListTile(
                   title: Row(
                     children: [
+                      /// ElementNode の名前を入力するテキストフィールド。
                       Expanded(
                         child: TextField(
                           decoration:
@@ -70,6 +78,7 @@ class ElementNodeInputPageState extends State<ElementNodeInputPage> {
                         ),
                       ),
                       const SizedBox(width: 10),
+                      /// 他の ElementNode を対象として選択するプルダウンメニュー。
                       Expanded(
                         child: DropdownButton<String>(
                           value: elementNode.target,
@@ -92,6 +101,7 @@ class ElementNodeInputPageState extends State<ElementNodeInputPage> {
                           },
                         ),
                       ),
+                      /// ElementNode の色を選択するボタン。
                       IconButton(
                         icon: Icon(Icons.color_lens, color: elementNode.color),
                         onPressed: () {
@@ -125,6 +135,7 @@ class ElementNodeInputPageState extends State<ElementNodeInputPage> {
                           );
                         },
                       ),
+                      /// ElementNode を削除するボタン。
                       IconButton(
                         icon: const Icon(Icons.delete, color: Colors.red),
                         onPressed: () {
