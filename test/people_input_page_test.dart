@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
-import 'package:n_sukumi_maker/main.dart';
+import 'package:n_sukumi_maker/people_input_page.dart';
 
 
 void main() {
