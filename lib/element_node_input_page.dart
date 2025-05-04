@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'person.dart';
+import 'element_node.dart';
 import 'ring_diagram_painter.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
@@ -11,21 +11,14 @@ class PeopleInputPage extends StatefulWidget {
 }
 
 class PeopleInputPageState extends State<PeopleInputPage> {
-  final List<Color> defaultColors = [
-    Colors.blue,
-    Colors.red,
-    Colors.green,
-    Colors.orange,
-    Colors.purple,
-    Colors.teal,
-  ];
 
-  List<Person> people = [];
+
+  List<ElementNode> people = [];
 
   void addPerson() {
     setState(() {
       final color = defaultColors[people.length % defaultColors.length];
-      people.add(Person(name: '', color: color));
+      people.add(ElementNode(name: '', color: color));
     });
   }
 
@@ -38,7 +31,7 @@ class PeopleInputPageState extends State<PeopleInputPage> {
   @override
   void initState() {
     super.initState();
-    people.add(Person(name: '', color: Colors.blue));
+    people.add(ElementNode(name: '', color: Colors.blue));
   }
 
   @override
@@ -154,4 +147,12 @@ class PeopleInputPageState extends State<PeopleInputPage> {
       ),
     );
   }
+  final List<Color> defaultColors = [
+  Colors.blue,
+  Colors.red,
+  Colors.green,
+  Colors.orange,
+  Colors.purple,
+  Colors.teal,
+  ];
 }

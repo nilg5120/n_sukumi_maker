@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class Person {
+class ElementNode {
   String name;
   Color color;
   String? target;
 
-  Person({required this.name, required this.color, this.target});
+  ElementNode({required this.name, required this.color, this.target});
 }

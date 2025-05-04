@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
-import 'person.dart';
+import 'element_node.dart';
 
 class RingDiagramPainter extends CustomPainter {
-  final List<Person> people;
-  RingDiagramPainter(this.people);
+  final List<ElementNode> elementNode;
+  RingDiagramPainter(this.elementNode);
 
   @override
   void paint(Canvas canvas, Size size) {
-    final validPeople = people.where((p) => p.name.isNotEmpty).toList();
+    final validElementNode = elementNode.where((p) => p.name.isNotEmpty).toList();
 
-    if (validPeople.isEmpty) return;
+    if (validElementNode.isEmpty) return;
 
-    final groupMap = groupPeople(validPeople);
+    final groupMap = groupElementNode(validElementNode);
 
-    final groups = <int, List<Person>>{};
-    for (var person in validPeople) {
+    final groups = <int, List<ElementNode>>{};
+    for (var person in validElementNode) {
       final gid = groupMap[person.name]!;
       groups.putIfAbsent(gid, () => []).add(person);
     }
@@ -53,7 +53,7 @@ class RingDiagramPainter extends CustomPainter {
       }
     });
 
-    for (final person in validPeople) {
+    for (final person in validElementNode) {
       final from = positions[person.name];
       final toName = person.target;
       if (from == null || toName == null) continue;
@@ -100,31 +100,31 @@ class RingDiagramPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 
-  Map<String, int> groupPeople(List<Person> people) {
+  Map<String, int> groupElementNode(List<ElementNode> elementNodes) {
     Map<String, int> groupMap = {};
     int groupId = 0;
 
     void dfs(String name) {
-      for (var person in people) {
-        if (person.name == name) {
-          final targetName = person.target;
+      for (var elementNode in elementNodes) {
+        if (elementNode.name == name) {
+          final targetName = elementNode.target;
           if (targetName != null && !groupMap.containsKey(targetName)) {
             groupMap[targetName] = groupId;
             dfs(targetName);
           }
         }
-        if (person.target == name && !groupMap.containsKey(person.name)) {
-          groupMap[person.name] = groupId;
-          dfs(person.name);
+        if (elementNode.target == name && !groupMap.containsKey(elementNode.name)) {
+          groupMap[elementNode.name] = groupId;
+          dfs(elementNode.name);
         }
       }
     }
 
-    for (var person in people) {
-      if (person.name.isEmpty) continue;
-      if (!groupMap.containsKey(person.name)) {
-        groupMap[person.name] = groupId;
-        dfs(person.name);
+    for (var elementNode in elementNodes) {
+      if (elementNode.name.isEmpty) continue;
+      if (!groupMap.containsKey(elementNode.name)) {
+        groupMap[elementNode.name] = groupId;
+        dfs(elementNode.name);
         groupId++;
       }
     }
