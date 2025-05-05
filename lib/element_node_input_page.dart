@@ -64,11 +64,22 @@ class ElementNodeInputPageState extends State<ElementNodeInputPage> {
                       /// ElementNode の名前を入力するテキストフィールド。
                       Expanded(
                         child: TextField(
-                          decoration:
-                              const InputDecoration(labelText: '名前'),
+                          decoration: const InputDecoration(labelText: '名前'),
                           onChanged: (value) {
                             setState(() {
-                              elementNode.name = value;
+                              // 空文字なら何もしない
+                              if (value.trim().isEmpty) return;
+
+                              // 同じ名前がすでに他のノードに存在するかチェック
+                              final nameExists = elementNodes.any((node) =>
+                                  node != elementNode && node.name == value.trim());
+
+                              if (nameExists) {
+                                return;
+                              }
+
+                              elementNode.name = value.trim();
+
                               bool isLast = index == elementNodes.length - 1;
                               if (value.isNotEmpty && isLast) {
                                 addElementNode();

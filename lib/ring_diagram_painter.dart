@@ -19,31 +19,42 @@ class RingDiagramPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     /// 名前が入力されているノードだけを抽出。
-    final validElementNode = elementNode.where((p) => p.name.isNotEmpty).toList();
+    final validElementNodes = elementNode.where((p) => p.name.isNotEmpty).toList();
 
-    if (validElementNode.isEmpty) return;
+    if (validElementNodes.isEmpty) return;
 
     /// ノードをグループ（つながっているノード群）に分類。
-    final groupMap = groupElementNode(validElementNode);
+    final groupMap = groupElementNode(validElementNodes);
 
     /// グループIDごとにノードをまとめる。
     final groups = <int, List<ElementNode>>{};
-    for (var person in validElementNode) {
-      final gid = groupMap[person.name]!;
-      groups.putIfAbsent(gid, () => []).add(person);
+    for (var elementNode in validElementNodes) {
+      final gid = groupMap[elementNode.name]!;
+      groups.putIfAbsent(gid, () => []).add(elementNode);
     }
 
     /// 各グループごとに円周上にノードを配置し、
     /// 名前のテキストと色付きの円を描く。
     final center = size.center(Offset.zero);
-    final baseRadius = 80.0;
-    final radiusStep = 60.0;
     final positions = <String, Offset>{};
 
+
+    // 横・縦の間隔
+    final horizontalStep = 200.0; // グループごとの横の間隔
+
     // 各グループ（つながりのあるノードの集まり）ごとに配置と描画を行う。
+    final totalGroups = groups.length;
+
     groups.forEach((groupId, groupMembers) {
-      // このグループの円の半径（グループIDによって外側へずらす）
-      final radius = baseRadius + groupId * radiusStep;
+      // グループごとの中心x座標（中央揃え）
+      final groupCenterX =
+          center.dx + (groupId - (totalGroups - 1) / 2) * horizontalStep;
+
+      // グループごとの中心y座標（画面中央）
+      final groupCenterY = center.dy;
+
+      // グループ内の円の半径（ノード数によって自動調整 or 固定）
+      final radius = 40.0 + groupMembers.length * 15.0;
 
       // ノードを円周上に等間隔で配置するための角度ステップ
       final angleStep = 2 * pi / groupMembers.length;
@@ -51,12 +62,13 @@ class RingDiagramPainter extends CustomPainter {
       for (int i = 0; i < groupMembers.length; i++) {
         final person = groupMembers[i];
 
-        // 円周上の配置角度（12時方向から時計回り）
+        // ノードの角度
         final angle = angleStep * i - pi / 2;
 
-        // このノードのx座標とy座標（中心点からのオフセット）
-        final dx = center.dx + radius * cos(angle);
-        final dy = center.dy + radius * sin(angle);
+        // ノードのx,y座標（グループ中心からのオフセット）
+        final dx = groupCenterX + radius * cos(angle);
+        final dy = groupCenterY + radius * sin(angle);
+
         final offset = Offset(dx, dy);
 
         // ノード名と位置を記録（あとで矢印を描くため）
@@ -79,8 +91,11 @@ class RingDiagramPainter extends CustomPainter {
       }
     });
 
+
+
+
     // 各ノードについて、target（対象）が設定されていれば線と矢印を描画
-    for (final person in validElementNode) {
+    for (final person in validElementNodes) {
       // 出発点（from）の座標
       final from = positions[person.name];
 
