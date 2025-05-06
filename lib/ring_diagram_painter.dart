@@ -60,7 +60,7 @@ class RingDiagramPainter extends CustomPainter {
       final angleStep = 2 * pi / groupMembers.length;
 
       for (int i = 0; i < groupMembers.length; i++) {
-        final person = groupMembers[i];
+        final elementNode = groupMembers[i];
 
         // ノードの角度
         final angle = angleStep * i - pi / 2;
@@ -72,14 +72,14 @@ class RingDiagramPainter extends CustomPainter {
         final offset = Offset(dx, dy);
 
         // ノード名と位置を記録（あとで矢印を描くため）
-        positions[person.name] = offset;
+        positions[elementNode.name] = offset;
 
         // ノード（円）を描画
-        canvas.drawCircle(offset, 20, Paint()..color = person.color);
+        canvas.drawCircle(offset, 20, Paint()..color = elementNode.color);
 
         // ノード名のテキストを描画（中央揃え）
         final textSpan = TextSpan(
-          text: person.name,
+          text: elementNode.name,
           style: TextStyle(color: Colors.white),
         );
         final tp = TextPainter(
@@ -90,9 +90,6 @@ class RingDiagramPainter extends CustomPainter {
         tp.paint(canvas, offset - Offset(tp.width / 2, tp.height / 2));
       }
     });
-
-
-
 
     // 各ノードについて、target（対象）が設定されていれば線と矢印を描画
     for (final person in validElementNodes) {
