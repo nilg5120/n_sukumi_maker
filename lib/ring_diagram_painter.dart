@@ -138,6 +138,27 @@ class RingDiagramPainter extends CustomPainter {
     }
   }
 
+
+  /// [from] から [to] に向かう矢印ヘッド（三角形）の頂点座標を計算。
+  /// - [arrowSize]: 矢印ヘッドのサイズ。
+  /// - [from]: 矢印の始点。
+  /// - [to]: 矢印の終点（矢印ヘッドの位置）。
+  /// - 戻り値: 矢印ヘッドの頂点座標リスト。
+  List<Offset> calculateArrowHeadPoints(Offset from, Offset to, double arrowSize) {
+    final angle = atan2(to.dy - from.dy, to.dx - from.dx);
+    return [
+      to,
+      Offset(
+        to.dx - arrowSize * cos(angle - pi / 6),
+        to.dy - arrowSize * sin(angle - pi / 6),
+      ),
+      Offset(
+        to.dx - arrowSize * cos(angle + pi / 6),
+        to.dy - arrowSize * sin(angle + pi / 6),
+      ),
+    ];
+  }
+
   /// [from] から [to] に向かう矢印の先端（三角形）を描画する。
   ///
   /// - [canvas]: 描画対象のキャンバス。
@@ -145,19 +166,13 @@ class RingDiagramPainter extends CustomPainter {
   /// - [to]: 矢印の終点（矢印ヘッドの位置）。
   void drawArrowHead(Canvas canvas, Offset from, Offset to) {
     const arrowSize = 10.0;
-    final angle = atan2(to.dy - from.dy, to.dx - from.dx);
+    final points = calculateArrowHeadPoints(from, to, arrowSize);
 
-    final path = Path();
-    path.moveTo(to.dx, to.dy);
-    path.lineTo(
-      to.dx - arrowSize * cos(angle - pi / 6),
-      to.dy - arrowSize * sin(angle - pi / 6),
-    );
-    path.lineTo(
-      to.dx - arrowSize * cos(angle + pi / 6),
-      to.dy - arrowSize * sin(angle + pi / 6),
-    );
-    path.close();
+    final path = Path()
+      ..moveTo(points[0].dx, points[0].dy)
+      ..lineTo(points[1].dx, points[1].dy)
+      ..lineTo(points[2].dx, points[2].dy)
+      ..close();
 
     final paint = Paint()..color = Colors.black;
     canvas.drawPath(path, paint);
