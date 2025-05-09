@@ -163,7 +163,7 @@ class ElementNodeInputPageState extends State<ElementNodeInputPage> {
             height: 400,  // 必要に応じて大きく
             child: InteractiveViewer(
               minScale: 0.5,
-              maxScale: 3.0,
+              maxScale: 10.0,
               child: CustomPaint(
                 painter: RingDiagramPainter(elementNodes),
                 child: Container(), // 必須
