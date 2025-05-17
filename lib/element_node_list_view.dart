@@ -1,4 +1,3 @@
-// element_node_list_view.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'element_node.dart';
@@ -29,6 +28,7 @@ class ElementNodeListView extends StatelessWidget {
         return ListTile(
           title: Row(
             children: [
+              // 名前入力フィールド
               Expanded(
                 child: TextField(
                   decoration: const InputDecoration(labelText: '名前'),
@@ -44,7 +44,11 @@ class ElementNodeListView extends StatelessWidget {
                   },
                 ),
               ),
+
+              // 追加ボタン
               const SizedBox(width: 10),
+
+              // 対象選択ドロップダウン
               Expanded(
                 child: DropdownButton<String>(
                   value: elementNode.target,
@@ -65,6 +69,8 @@ class ElementNodeListView extends StatelessWidget {
                   onChanged: (value) => elementNode.target = value,
                 ),
               ),
+
+              // 色選択ボタン
               IconButton(
                 icon: Icon(Icons.color_lens, color: elementNode.color),
                 onPressed: () {
@@ -94,6 +100,8 @@ class ElementNodeListView extends StatelessWidget {
                   );
                 },
               ),
+
+              // 削除ボタン
               IconButton(
                 icon: const Icon(Icons.delete, color: Colors.red),
                 onPressed: () => onRemove(index),

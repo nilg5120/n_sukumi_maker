@@ -1,4 +1,3 @@
-// element_node_input_page.dart
 import 'package:flutter/material.dart';
 import 'element_node.dart';
 import 'element_node_list_view.dart';
@@ -14,12 +13,15 @@ class ElementNodeInputPage extends StatefulWidget {
 class ElementNodeInputPageState extends State<ElementNodeInputPage> {
   List<ElementNode> elementNodes = [];
 
+  /// 初期化時にデフォルトのノードを追加
   @override
   void initState() {
     super.initState();
     elementNodes.add(ElementNode(name: '', color: Colors.blue));
   }
 
+  /// ノードを追加するメソッド
+  /// 新しいノードはデフォルトの色を持つ
   void addElementNode() {
     setState(() {
       final color = defaultColors[elementNodes.length % defaultColors.length];
@@ -27,12 +29,15 @@ class ElementNodeInputPageState extends State<ElementNodeInputPage> {
     });
   }
 
+  /// ノードを削除するメソッド
+  /// [index]は削除するノードのインデックス
   void removeElementNode(int index) {
     setState(() {
       elementNodes.removeAt(index);
     });
   }
 
+  /// デフォルトの色リスト
   final List<Color> defaultColors = [
     Colors.blue,
     Colors.red,
@@ -45,9 +50,14 @@ class ElementNodeInputPageState extends State<ElementNodeInputPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
+      // アプリバーのタイトル
       appBar: AppBar(title: const Text('nすくみメーカー')),
+
+      // ノードリストと図を表示するカラム
       body: Column(
         children: [
+          // ノードリストの表示
           Expanded(
             child: ElementNodeListView(
               elementNodes: elementNodes,
@@ -55,7 +65,11 @@ class ElementNodeInputPageState extends State<ElementNodeInputPage> {
               onRemove: removeElementNode,
             ),
           ),
+
+          // ノードリストと図の間にスペースを追加
           const SizedBox(height: 8),
+
+          // ノードの相関図を描画する
           SizedBox(
             height: 400,
             child: RingDiagramView(nodes: elementNodes),

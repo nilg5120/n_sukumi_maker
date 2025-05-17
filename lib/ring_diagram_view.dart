@@ -1,4 +1,3 @@
-// ring_diagram_view.dart
 import 'package:flutter/material.dart';
 import 'ring_diagram_painter.dart';
 import 'element_node.dart';
