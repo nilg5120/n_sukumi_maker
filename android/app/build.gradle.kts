@@ -22,7 +22,7 @@ println("keyAlias = ${keystoreProperties["keyAlias"]}")
 println("storeFile = ${keystoreProperties["storeFile"]}")
 
 android {
-    namespace = "com.example.flutter_application_1"
+    namespace = "com.ohkbuo.n_skumi_maker"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -47,7 +47,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.flutter_application_1"
+        applicationId = "com.ohkubo.n_skumi_maker"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
